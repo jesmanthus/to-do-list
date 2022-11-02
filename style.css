@@ -30,6 +30,11 @@ body {
   border-bottom: 1px solid white;
 }
 
+.todo__date-container {
+  display: flex;
+  gap: 4px;
+}
+
 .todo__list {
   list-style: none;
 }
@@ -38,6 +43,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 .todo__list--container {
