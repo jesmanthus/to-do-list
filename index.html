@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>toDo</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;1,700&family=Inter:wght@300;400&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </head>
+
 <body>
-  <main class="todo">
-    <div class="todo__container">
-      <h1>toDo</h1>
+  <header class="header">
+    <div class="header__container">
+      <div class="header__title">
+        <h1>My Day</h1>
+        <p>All my tasks in one place</p>
+      </div>
       <div class="todo__date">
         <div class="todo__date-container">
           <p class="todo__date-month"></p>
-          <p class="todo__date-day"></p>  
+          <p class="todo__date-day"></p>
+          <p class="todo__date-weekday"></p>
         </div>
-        <p class="todo__date-weekday"></p>
       </div>
+
+      <input class="todo__input" type="text" placeholder="Add a task" />
+      <span class="material-symbols-outlined">
+        add
+      </span>
+    </div>
+  </header>
+
+  <main class="todo">
+
+    <div class="todo__container">
+
       <div class="todo__list--container">
         <ul class="todo__list"></ul>
       </div>
-      <form class="todo__input--container">
-          <label for="">
-            <input class="todo__input" type="text" placeholder="Add item list">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </label>
-          <input id="panic-button" type="button" value="Boton de panico">
-          <input id="organize-button" type="button" value="Ordenar">
-      </form>
+
+      <div class="todo__actions--container">
+        <span>1 item left</span>
+
+        <ul class="todo__nav">
+          <li><a href="">All</a></li>
+          <li><a href="">Peding</a></li>
+          <li><a href="">Completed</a></li>
+        </ul>
+
+        <div class="clear__buttons-container">
+          <button id="panic-button">panico</button>
+          <button id="organize-button">organizar</button>
+          <button id="">Clear completed</button>
+        </div>
+
+      </div>
+
     </div>
   </main>
+
+
+
   <script src="./main.js"></script>
 </body>
+
 </html>

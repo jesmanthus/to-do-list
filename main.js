@@ -3,7 +3,7 @@ const dateMonth = document.querySelector('.todo__date-month')
 const dateWeekday = document.querySelector('.todo__date-weekday')
 const todoList = document.querySelector('.todo__list');
 const todoInput = document.querySelector('.todo__input');
-const addButton = document.querySelector('.fa-plus')
+const addButton = document.querySelector('.material-symbols-outlined')
 const panicButton = document.querySelector('#panic-button')
 const organizeButton = document.querySelector('#organize-button')
 
@@ -16,6 +16,12 @@ function addItemList() {
   if (todoInput.value != '') {
     const todoItem = document.createElement('li');
     const todoText = document.createElement('p');
+
+    todoText.addEventListener('click', (e) => {
+      const newInputEdit = document.createElement('input')
+      const todoItem = e.target.parentElement
+      todoItem.appendChild(newInputEdit)
+    })
 
     todoItem.classList.add('todo__item');
     todoText.classList.add('todo__text');
@@ -32,9 +38,9 @@ function addItemList() {
 
 
 function addDeleteButton () {
-  const deletebutton = document.createElement('i');
-  deletebutton.classList.add('fa');
-  deletebutton.classList.add('fa-trash');
+  const deletebutton = document.createElement('span');
+  deletebutton.classList.add('material-symbols-outlined')
+  deletebutton.innerText = 'delete'
 
   deletebutton.addEventListener('click', (e) => {
     const item = e.target.parentElement;
@@ -44,19 +50,22 @@ function addDeleteButton () {
 }
 
 function addCompleteButton () {
-  const completeTaskButton = document.createElement('i');
-  completeTaskButton.classList.add('fa');
-  completeTaskButton.classList.add('fa-check');
-  completeTaskButton.classList.add('border-radius');
+  const completeTaskButton = document.createElement('span');
+  completeTaskButton.classList.add('material-symbols-outlined');
   
+  completeTaskButton.innerText = 'radio_button_unchecked'
+
   completeTaskButton.addEventListener('click', (e) => {
+    if(completeTaskButton.innerText === 'radio_button_unchecked') {
+      completeTaskButton.innerText = 'radio_button_checked'
+    } else {
+      completeTaskButton.innerText = 'radio_button_unchecked'
+    }
+
     const item = e.target.nextElementSibling;
     const listItem = e.target.parentElement;
-
     listItem.classList.toggle('taskDone')
     item.classList.toggle('task-completed')
-
-    completeTaskButton.classList.toggle('border-radius-on')
   })
   return completeTaskButton;
 }
