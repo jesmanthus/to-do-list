@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>toDo</title>
+  <title>My Day App</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,22 +41,24 @@
     <div class="todo__container">
 
       <div class="todo__list--container">
-        <ul class="todo__list"></ul>
+        <ul class="todo__list">
+          <li id='empty' class="todo__item">empty</li>
+        </ul>
       </div>
 
       <div class="todo__actions--container">
-        <span>1 item left</span>
+        <span>0 item left</span>
 
         <ul class="todo__nav">
-          <li><a href="">All</a></li>
-          <li><a href="">Peding</a></li>
-          <li><a href="">Completed</a></li>
+          <li><a href="#">All</a></li>
+          <li><a href="#">Pending</a></li>
+          <li><a href="#">Completed</a></li>
         </ul>
 
         <div class="clear__buttons-container">
-          <button id="panic-button">panico</button>
-          <button id="organize-button">organizar</button>
-          <button id="">Clear completed</button>
+          <button id="organize-button">Organize</button>
+          <button id="clearCompleted-button">Clear completed</button>
+          <button id="panic-button">Clear All</button>
         </div>
 
       </div>

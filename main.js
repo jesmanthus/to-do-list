@@ -6,6 +6,7 @@ const todoInput = document.querySelector('.todo__input');
 const addButton = document.querySelector('.material-symbols-outlined')
 const panicButton = document.querySelector('#panic-button')
 const organizeButton = document.querySelector('#organize-button')
+const emptyListItem = document.querySelector('#empty')
 
 
 panicButton.addEventListener('click', cleanList)
@@ -14,6 +15,10 @@ addButton.addEventListener('click', addItemList)
 
 function addItemList() {
   if (todoInput.value != '') {
+    if (todoList.lastElementChild === emptyListItem) {
+      todoList.removeChild(emptyListItem)
+    }
+
     const todoItem = document.createElement('li');
     const todoText = document.createElement('p');
 
@@ -45,6 +50,10 @@ function addDeleteButton () {
   deletebutton.addEventListener('click', (e) => {
     const item = e.target.parentElement;
     todoList.removeChild(item)
+
+    if(todoList.childElementCount === 0) {
+      todoList.appendChild(emptyListItem)
+    }
   })
   return deletebutton;
 }
@@ -72,6 +81,7 @@ function addCompleteButton () {
 
 function cleanList () {
   todoList.textContent = ''
+  todoList.appendChild(emptyListItem)
 }
 
 function organizeList() {
@@ -100,3 +110,10 @@ const setDate = () => {
 }
 
 setDate();
+
+// if(todoList.childElementCount === 0) {
+//   const emptyListItem = document.createElement('li')
+//   emptyListItem.setAttribute('id', 'empty')
+//   emptyListItem.innerText = 'ola'
+//   todoList.appendChild(emptyListItem)
+// }

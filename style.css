@@ -89,13 +89,27 @@ body {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 1.2rem 2rem;
+  padding: 15px 16px;
   border-bottom: 1px solid #ededed;
   font-size: 24px;
 }
 
+.todo__item#empty {
+  justify-content: center;
+  font-style: italic;
+  color: #949494;
+}
+
+.todo__actions--container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 16px 24px;
+  font-size: 1.4rem;
+}
 
 .todo__nav {
+  margin-left: auto;
   display: inline-block;
   list-style: none;
 }
@@ -103,6 +117,23 @@ body {
 .todo__nav li {
   display: inline-block;
 }
+
+.todo__nav a {
+  padding: 3px 7px;
+  border: solid 1px transparent;
+  border-radius: 3px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.todo__nav a.active {
+  border-color: #4c33b1
+}
+
+.todo__nav a:hover {
+  border-color: #6e49fe;
+}
+
 
 .todo__text {
   margin-left: 16px;
@@ -112,15 +143,25 @@ body {
   margin-left: auto;
 }
 
-.todo__actions--container {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-}
-
 
 .task-completed {
   text-decoration: line-through;
   color: #949494;
+}
+
+.clear__buttons-container {
+  margin-top: 16px;
+}
+
+.clear__buttons-container button {
+  margin: 0 6px;
+  border: none;
+  background-color: inherit;
+}
+
+.clear__buttons-container button:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 
