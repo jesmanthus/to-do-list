@@ -22,7 +22,7 @@ cleanListCompletedButton.addEventListener('click', () => {
 })
 
 organizeButton.addEventListener('click', () => {
-  if(todoList.lastElementChild !== emptyListItem) organizeList()
+  if(todoList.lastElementChild !== emptyListItem) renderOrganizeList()
 })
 
 addButton.addEventListener('click', () => {
@@ -239,8 +239,6 @@ function organizeList() {
       taskToDo.push(todoList.children[i])
     }
   }
-
-  items = []
 
   return [...taskToDo, ...taskDone]
 }
