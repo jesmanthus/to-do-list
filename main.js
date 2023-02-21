@@ -204,11 +204,16 @@ function cleanList () {
 }
 
 function cleanListCompleted () {
+  const taskToDo = []
+
   for (let i=0; todoList.children.length > i; i++) {
-    if(todoList.children[i].classList.contains('taskDone')) {
-      todoList.removeChild(todoList.children[i])
-    }
+    if(!todoList.children[i].classList.contains('taskDone')) {
+      taskToDo.push(todoList.children[i])
+    } 
   }
+
+  todoList.textContent = ''
+  taskToDo.forEach(task => todoList.appendChild(task))
   
   items = []
 
@@ -280,7 +285,7 @@ function changeNumberPendingItems () {
       numberPendingItems.innerText = `${taskToDo.length} items left`
     }
   } else {
-    numberPendingItems.innerText = `0 item left`
+    numberPendingItems.innerText = `0 items left`
   }
 }
 
