@@ -163,6 +163,9 @@ button,
   margin-left: auto;
 }
 
+.todo__text+span:hover {
+  color: #c18585;
+}
 
 .task-completed {
   text-decoration: line-through;
@@ -188,6 +191,10 @@ button,
   .header__container,
   .todo__container {
     max-width: 425px;
+  }
+
+  .todo__nav a {
+    margin: 0 2px;
   }
 }
 

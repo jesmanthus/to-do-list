@@ -9,26 +9,34 @@ const cleanListCompletedButton = document.querySelector('#clearCompleted-button'
 const organizeButton = document.querySelector('#organize-button')
 const emptyListItem = document.querySelector('#empty')
 const numberPendingItems = document.querySelector('#number-pending-items')
+const allPageButton = document.querySelector('#all-page')
+const pendingPageButton = document.querySelector('#pending-page')
+const completedPageButton = document.querySelector('#completed-page')
 let items = []
+let numberItem = 0
+
 
 /* Calls */
 setDate();
 
 /* Events */
+window.addEventListener('hashchange', renderUI)
+
+document.addEventListener('DOMContentLoaded', renderUI)
+
 panicButton.addEventListener('click', cleanList)
 
-cleanListCompletedButton.addEventListener('click', () => {
-  if(todoList.lastElementChild !== emptyListItem) cleanListCompleted()
-})
+cleanListCompletedButton.addEventListener('click', cleanListCompleted)
 
-organizeButton.addEventListener('click', () => {
-  if(todoList.lastElementChild !== emptyListItem) renderOrganizeList()
-})
+// organizeButton.addEventListener('click', () => {
+//   if (todoList.lastElementChild !== emptyListItem) renderOrganizeList()
+// })
 
 addButton.addEventListener('click', () => {
   if (todoInput.value != '') {
     items.push(addItemList())
-    addItemStorage()    
+    addItemStorage()
+    numberItem = items[items.length - 1].id + 1
   }
   changeNumberPendingItems()
 })
@@ -37,23 +45,8 @@ todoInput.addEventListener('keyup', () => {
   if (event.which === 13 && todoInput.value != '') {
     items.push(addItemList())
     addItemStorage()
+    numberItem = items[items.length - 1].id + 1
   }
-  changeNumberPendingItems()
-})
-
-document.addEventListener('DOMContentLoaded', () => {
-  if(localStorage.getItem('items') !== null) {
-    items = JSON.parse(localStorage.getItem('items'))
-  }
-  items.forEach(item => {
-    if(item.taskDone === true) {
-      todoInput.value = item.taskName
-      addItemListCompleted()
-    } else {
-      todoInput.value = item.taskName
-      addItemList()
-    }
-  })
   changeNumberPendingItems()
 })
 
@@ -75,13 +68,20 @@ function addItemList() {
   todoItem.appendChild(addCompleteButton())
   todoItem.appendChild(todoText);
   todoItem.appendChild(addDeleteButton())
-  todoList.prepend(todoItem);
+  todoItem.setAttribute('data-id', numberItem)
+
+  if (!location.hash.startsWith('#/completed')) {
+    todoList.prepend(todoItem);
+  } else if (todoList.childElementCount === 0) {
+    todoList.appendChild(emptyListItem)
+  }
 
   todoInput.value = ''
-  
+
   const taskObj = {
     taskName: todoText.innerText,
-    taskDone: false
+    taskDone: false,
+    id: items.length === 0 ? 0 : numberItem
   }
 
   return taskObj
@@ -105,26 +105,25 @@ function addItemListCompleted() {
   todoItem.appendChild(addCompleteButton())
   todoItem.appendChild(todoText);
   todoItem.appendChild(addDeleteButton())
-
+  todoItem.setAttribute('data-id', numberItem)
   todoItem.firstElementChild.innerText = 'radio_button_checked'
   todoItem.firstElementChild.nextElementSibling.classList.add('task-completed')
-  
+
 
   todoList.prepend(todoItem);
 
-  
-
   todoInput.value = ''
-  
+
   const taskObj = {
     taskName: todoText.innerText,
-    taskDone: true
+    taskDone: true,
+    id: numberItem
   }
 
   return taskObj
 }
 
-function addDeleteButton () {
+function addDeleteButton() {
   const deletebutton = document.createElement('span');
   deletebutton.classList.add('material-symbols-outlined')
   deletebutton.innerText = 'delete'
@@ -133,23 +132,14 @@ function addDeleteButton () {
     const item = e.target.parentElement;
     todoList.removeChild(item)
 
-    if(todoList.childElementCount === 0) {
+    if (todoList.childElementCount === 0) {
       todoList.appendChild(emptyListItem)
     }
 
-    items = []
+    items = items.filter(arrayItem => arrayItem.id != item.getAttribute("data-id"))
 
-    for(let i=0; document.querySelectorAll('.todo__text').length > i; i++) {
-      
-      const objectTask = {
-        taskName: todoList.children[i].firstElementChild.nextElementSibling.innerText,
-        taskDone: todoList.children[i].classList.contains('taskDone')
-      }
 
-      items.push(objectTask)
-    }
-
-    items = items.reverse()
+    numberItem = items[0] !== undefined ? items[items.length - 1].id + 1 : 0
 
     addItemStorage()
     changeNumberPendingItems()
@@ -157,14 +147,14 @@ function addDeleteButton () {
   return deletebutton;
 }
 
-function addCompleteButton () {
+function addCompleteButton() {
   const completeTaskButton = document.createElement('span');
   completeTaskButton.classList.add('material-symbols-outlined');
-  
+
   completeTaskButton.innerText = 'radio_button_unchecked'
 
   completeTaskButton.addEventListener('click', (e) => {
-    if(completeTaskButton.innerText === 'radio_button_unchecked') {
+    if (completeTaskButton.innerText === 'radio_button_unchecked') {
       completeTaskButton.innerText = 'radio_button_checked'
     } else {
       completeTaskButton.innerText = 'radio_button_unchecked'
@@ -175,115 +165,96 @@ function addCompleteButton () {
     listItem.classList.toggle('taskDone')
     item.classList.toggle('task-completed')
 
-    items = []
-
-    for(let i=0; todoList.children.length > i; i++) {
-      
-      const objectTask = {
-        taskName: todoList.children[i].firstElementChild.nextElementSibling.innerText,
-        taskDone: todoList.children[i].classList.contains('taskDone')
+    items = items.map(arrayItem => {
+      if (arrayItem.id == listItem.getAttribute("data-id")) {
+        if (arrayItem.taskDone === true) {
+          arrayItem.taskDone = false
+        } else {
+          arrayItem.taskDone = true
+        }
       }
-
-      items.push(objectTask)
-    }
-
-    items = items.reverse()
+      return arrayItem
+    })
 
     addItemStorage()
+    renderUI()
     changeNumberPendingItems()
   })
+
   return completeTaskButton;
 }
 
-function cleanList () {
+function cleanList() {
   todoList.textContent = ''
   todoList.appendChild(emptyListItem)
   items = []
+  numberItem = 0
   addItemStorage()
   changeNumberPendingItems()
 }
 
-function cleanListCompleted () {
-  const taskToDo = []
-
-  for (let i=0; todoList.children.length > i; i++) {
-    if(!todoList.children[i].classList.contains('taskDone')) {
-      taskToDo.push(todoList.children[i])
-    } 
-  }
+function cleanListCompleted() {
+  items = items.filter(arrayItem => arrayItem.taskDone === false)
 
   todoList.textContent = ''
-  taskToDo.forEach(task => todoList.appendChild(task))
-  
-  items = []
 
-  for(let i=0; todoList.children.length > i; i++) {
-      
-    const objectTask = {
-      taskName: todoList.children[i].firstElementChild.nextElementSibling.innerText,
-      taskDone: false
-    }
+  items.forEach(task => {
+    todoInput.value = task.taskName
+    numberItem = task.id
+    addItemList()
+  })
 
-    items.push(objectTask)
-  }
-
-  items = items.reverse()
+  numberItem = items.length === 0 ? 0 : items[items.length - 1].id + 1
   addItemStorage()
 
-  if(todoList.children.length === 0) todoList.appendChild(emptyListItem)
-} 
+  if (todoList.children.length === 0) todoList.appendChild(emptyListItem)
+}
 
 function organizeList() {
   const taskDone = []
   const taskToDo = []
 
-  for(let i=0; todoList.children.length > i; i++) {
-    if(todoList.children[i].classList.contains('taskDone')) {
-      taskDone.push(todoList.children[i])
+  items.forEach(task => {
+    if (task.taskDone === true) {
+      taskDone.push(task)
     } else {
-      taskToDo.push(todoList.children[i])
+      taskToDo.push(task)
     }
-  }
+  })
 
-  return [...taskToDo, ...taskDone]
+  return [...taskDone, ...taskToDo]
 }
 
 function renderOrganizeList() {
-  organizeList().forEach(listItem => todoList.appendChild(listItem))
+  todoList.textContent = ''
 
-  items = []
+  items = organizeList()
 
-  for(let i=0; todoList.children.length > i; i++) {
-      
-    const objectTask = {
-      taskName: todoList.children[i].firstElementChild.nextElementSibling.innerText,
-      taskDone: todoList.children[i].classList.contains('taskDone')
+  items.forEach(task => {
+    if (task.taskDone === false) {
+      todoInput.value = task.taskName
+      numberItem = task.id
+      addItemList()
+    } else {
+      todoInput.value = task.taskName
+      numberItem = task.id
+      addItemListCompleted()
     }
+  })
 
-    items.push(objectTask)
-  }
-
-  items = items.reverse()
-
-  addItemStorage()
+  // addItemStorage()
 }
 
-function changeNumberPendingItems () {
-  if(todoList.lastElementChild !== emptyListItem) {
-    // const taskDone = []
-    const taskToDo = []
-  
-    for(let i=0; todoList.children.length > i; i++) {
-      if(!todoList.children[i].classList.contains('taskDone')) {
-        taskToDo.push(todoList.children[i])
-      } 
-    }
+function changeNumberPendingItems() {
+  if (items.length !== 0) {
+    const taskToDo = items.filter(arrayItem => arrayItem.taskDone === false)
 
-    if(taskToDo.length === 1) {
+    if (taskToDo.length === 1) {
       numberPendingItems.innerText = `${taskToDo.length} item left`
     } else {
       numberPendingItems.innerText = `${taskToDo.length} items left`
     }
+
   } else {
     numberPendingItems.innerText = `0 items left`
   }
@@ -294,6 +265,79 @@ function setDate() {
   dateDay.textContent = date.toLocaleString('en', { day: 'numeric' });
   dateMonth.textContent = date.toLocaleString('en', { month: 'short' });
   dateWeekday.textContent = date.toLocaleString('en', { weekday: 'long' });
+}
+
+function renderUI() {
+  if (location.hash.startsWith('#/pending')) {
+    todoList.textContent = ''
+    todoList.appendChild(emptyListItem)
+    pendingPageButton.classList.add('active')
+    allPageButton.classList.remove('active')
+    completedPageButton.classList.remove('active')
+
+    if (localStorage.getItem('items') !== null) {
+      items = JSON.parse(localStorage.getItem('items'))
+    }
+
+    items.forEach(item => {
+      if (item.taskDone === false) {
+        todoInput.value = item.taskName
+        numberItem = item.id
+        addItemList()
+      }
+    })
+
+    if (items.length) numberItem = items[items.length - 1].id + 1
+    changeNumberPendingItems()
+
+  } else if (location.hash.startsWith('#/completed')) {
+    todoList.textContent = ''
+    todoList.appendChild(emptyListItem)
+    completedPageButton.classList.add('active')
+    pendingPageButton.classList.remove('active')
+    allPageButton.classList.remove('active')
+
+    if (localStorage.getItem('items') !== null) {
+      items = JSON.parse(localStorage.getItem('items'))
+    }
+
+    items.forEach(item => {
+      if (item.taskDone === true) {
+        todoInput.value = item.taskName
+        numberItem = item.id
+        addItemListCompleted()
+      }
+    })
+
+    if (items.length) numberItem = items[items.length - 1].id + 1
+    changeNumberPendingItems()
+
+  } else {
+    todoList.textContent = ''
+    todoList.appendChild(emptyListItem)
+    allPageButton.classList.add('active')
+    pendingPageButton.classList.remove('active')
+    completedPageButton.classList.remove('active')
+
+    if (localStorage.getItem('items') !== null) {
+      items = JSON.parse(localStorage.getItem('items'))
+    }
+
+    items.forEach(item => {
+      if (item.taskDone === true) {
+        todoInput.value = item.taskName
+        numberItem = item.id
+        addItemListCompleted()
+      } else {
+        todoInput.value = item.taskName
+        numberItem = item.id
+        addItemList()
+      }
+    })
+
+    if (items.length !== 0) numberItem = items[items.length - 1].id + 1
+    changeNumberPendingItems()
+  }
 }
 
 /* LOCAL STORAGE */

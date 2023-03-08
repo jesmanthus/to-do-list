@@ -30,7 +30,7 @@
       </div>
 
       <div class="main__input-container">
-        <input class="todo__input" type="text" placeholder="Add a task" />
+        <input class="todo__input" type="text" placeholder="Add a new task" />
         <span class="material-symbols-outlined">add</span>
       </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="todo__container">
 
       <div class="todo__list--container">
-        <ul class="todo__list">
+        <ul class="todo__list" data-router>
           <li id='empty' class="todo__item">empty</li>
         </ul>
       </div>
@@ -50,13 +50,13 @@
         <span id="number-pending-items"></span>
 
         <ul class="todo__nav">
-          <li><a href="#">All</a></li>
-          <li><a href="#">Pending</a></li>
-          <li><a href="#">Completed</a></li>
+          <li><a id="all-page" href="#/">All</a></li>
+          <li><a id="pending-page" href="#/pending">Pending</a></li>
+          <li><a id="completed-page" href="#/completed">Completed</a></li>
         </ul>
 
         <div class="clear__buttons-container">
-          <button id="organize-button">Organize</button>
+          <!-- <button id="organize-button">Organize</button> -->
           <button id="clearCompleted-button">Clear completed</button>
           <button id="panic-button">Clear All</button>
         </div>
@@ -68,6 +68,8 @@
 
 
 
+  <!-- <script src="./routes.js"></script> -->
+  <!-- <script src="./router.js"></script> -->
   <script src="./main.js"></script>
 </body>
 
