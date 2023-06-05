@@ -112,6 +112,11 @@ button,
   color: #010101;
 }
 
+.todo__item.editTextBoxActive {
+  padding: 0;
+  border-bottom: none;
+}
+
 .todo__item#empty {
   justify-content: center;
   font-style: italic;
@@ -154,17 +159,29 @@ button,
 
 
 .todo__text {
+  width: 100%;
   margin: 0 8px;
   word-break: break-all;
   cursor: pointer;
 }
 
-.todo__text+span {
+/* .todo__text+span {
   margin-left: auto;
-}
+} */
 
 .todo__text+span:hover {
   color: #c18585;
+}
+
+.todo__editTextBox {
+  width: 100%;
+  padding: 14px 16px;
+  margin-left: 32px;
+  border: 1px solid #999;
+  outline: none;
+  box-shadow: 0 0 3px 1.5px #f1f1f1 inset;
+  font-family: 'Roboto', sans-serif;
+  font-size: 2rem;
 }
 
 .task-completed {
@@ -237,6 +254,11 @@ button,
 
   .todo__text + span {
     opacity: 0;
+  }
+
+  .todo__editTextBox {
+    margin-left: 44px;
+    font-size: 2.4rem;
   }
 
   .todo__actions--container {

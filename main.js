@@ -59,6 +59,16 @@ function addItemList() {
   const todoItem = document.createElement('li');
   const todoText = document.createElement('p');
 
+  // todoText.addEventListener('click', () => {
+  //   if (window.innerWidth <= 1023) editTextItem()
+  // })
+
+  // todoText.addEventListener('dblclick', () => {
+  //   if (window.innerWidth >= 1024) editTextItem()
+  // })
+
+  todoText.addEventListener('click', editTextItem)
+
 
   todoItem.classList.add('todo__item');
   todoText.classList.add('todo__text');
@@ -121,6 +131,56 @@ function addItemListCompleted() {
   }
 
   return taskObj
+}
+
+function editTextItem(event) {
+  const todoItem = event.target.parentElement
+  const editTextBox = document.createElement('input')
+
+
+  todoItem.childNodes.forEach(item => {
+    item.style.display = 'none'
+  })
+
+  todoItem.classList.add('editTextBoxActive')
+  editTextBox.classList.add('todo__editTextBox')
+  editTextBox.value = todoItem.firstElementChild.nextElementSibling.textContent
+  todoItem.appendChild(editTextBox)
+  todoItem.lastElementChild.focus()
+
+
+  editTextBox.addEventListener('blur', () => {
+
+    todoItem.removeChild(editTextBox)
+    todoItem.classList.remove('editTextBoxActive')
+
+    todoItem.childNodes.forEach(item => {
+      item.removeAttribute('style')
+    })
+
+  })
+
+  editTextBox.addEventListener('keyup', (event) => {
+    if (event.which === 27) {
+      editTextBox.blur()
+    }
+  })
+
+
+
+  editTextBox.addEventListener('keyup', (event) => {
+    if (event.which === 13) {
+      todoItem.firstElementChild.nextElementSibling.textContent = editTextBox.value
+
+      items = items.map(arrayItem => {
+        if (arrayItem.id == todoItem.getAttribute("data-id")) arrayItem.taskName = editTextBox.value.trim()
+        return arrayItem
+      })
+
+      addItemStorage()
+      renderUI()
+    }
+  })
 }
 
 function addDeleteButton() {
@@ -210,20 +270,20 @@ function cleanListCompleted() {
   if (todoList.children.length === 0) todoList.appendChild(emptyListItem)
 }
 
-function organizeList() {
-  const taskDone = []
-  const taskToDo = []
+// function organizeList() {
+//   const taskDone = []
+//   const taskToDo = []
 
-  items.forEach(task => {
-    if (task.taskDone === true) {
-      taskDone.push(task)
-    } else {
-      taskToDo.push(task)
-    }
-  })
+//   items.forEach(task => {
+//     if (task.taskDone === true) {
+//       taskDone.push(task)
+//     } else {
+//       taskToDo.push(task)
+//     }
+//   })
 
-  return [...taskDone, ...taskToDo]
-}
+//   return [...taskDone, ...taskToDo]
+// }
 
 function renderOrganizeList() {
   todoList.textContent = ''
